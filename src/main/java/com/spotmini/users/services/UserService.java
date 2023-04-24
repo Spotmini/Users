@@ -17,14 +17,14 @@ public class UserService {
         UserEntity userEntity = new UserEntity();
         userEntity.setUsername(userModel.getUsername());
         userEntity.setPassword(userModel.getPassword());
-        userEntity.setAdmin(userModel.isSpecial());
+        userEntity.setSpecial(userModel.isSpecial());
 
         UserEntity savedUserEntity = userRepository.save(userEntity);
 
         UserModel savedUserModel = new UserModel();
         savedUserModel.setId(savedUserEntity.getId());
         savedUserModel.setUsername(savedUserEntity.getUsername());
-        savedUserModel.setAdmin(savedUserEntity.isSpecial());
+        savedUserModel.setSpecial(savedUserEntity.isSpecial());
 
         return savedUserModel;
     }
@@ -37,7 +37,7 @@ public class UserService {
                 UserModel userModel = new UserModel();
                 userModel.setId(userEntity.getId());
                 userModel.setUsername(userEntity.getUsername());
-                userModel.setAdmin(userEntity.isSpecial());
+                userModel.setSpecial(userEntity.isSpecial());
 
                 return userModel;
             }
@@ -45,5 +45,18 @@ public class UserService {
 
         return null;
     }
+
+    public void updateUserRole(Long userId, boolean isAdmin) throws Exception {
+        Optional<UserEntity> user = userRepository.findById(userId);
+
+        if (user.isPresent()) {
+            UserEntity userToUpdate = user.get();
+            userToUpdate.setSpecial(isAdmin);
+            userRepository.save(userToUpdate);
+        } else {
+            throw new Exception("User not found with id: " + userId);
+        }
+    }
+
 }
 

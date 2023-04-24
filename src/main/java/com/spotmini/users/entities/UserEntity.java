@@ -56,7 +56,7 @@ public class UserEntity {
         return isSpecial;
     }
 
-    public void setAdmin(boolean isSpecial) {
+    public void setSpecial(boolean isSpecial) {
         this.isSpecial = isSpecial;
     }
 }
