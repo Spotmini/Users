@@ -10,52 +10,48 @@ import java.util.Optional;
 
 @Service
 public class UserService {
+
+    private UserEntity userEntity = null;
+
     @Autowired
     private UserRepository userRepository;
 
-    public UserModel createUser(UserModel userModel) {
+    public UserEntity createUser(UserModel userModel) {
         UserEntity userEntity = new UserEntity();
-        userEntity.setUsername(userModel.getUsername());
-        userEntity.setPassword(userModel.getPassword());
-        userEntity.setSpecial(userModel.isSpecial());
+        userEntity.setUsername(userEntity.getUsername());
+        userEntity.setPassword(userEntity.getPassword());
 
-        UserEntity savedUserEntity = userRepository.save(userEntity);
-
-        UserModel savedUserModel = new UserModel();
-        savedUserModel.setId(savedUserEntity.getId());
-        savedUserModel.setUsername(savedUserEntity.getUsername());
-        savedUserModel.setSpecial(savedUserEntity.isSpecial());
-
-        return savedUserModel;
+        return userRepository.save(userEntity);
     }
 
-    public UserModel loginUser(String username, String password) {
+    public UserEntity loginUser(String username, String password) {
         Optional<UserEntity> optionalUserEntity = userRepository.findByUsername(username);
         if (optionalUserEntity.isPresent()) {
             UserEntity userEntity = optionalUserEntity.get();
             if (userEntity.getPassword().equals(password)) {
-                UserModel userModel = new UserModel();
-                userModel.setId(userEntity.getId());
-                userModel.setUsername(userEntity.getUsername());
-                userModel.setSpecial(userEntity.isSpecial());
-
-                return userModel;
+                this.userEntity = userEntity;
+                return userEntity;
             }
         }
 
         return null;
     }
 
-    public void updateUserRole(Long userId, boolean isAdmin) throws Exception {
+    public void updateUserRole(Long userId){
         Optional<UserEntity> user = userRepository.findById(userId);
-
         if (user.isPresent()) {
             UserEntity userToUpdate = user.get();
-            userToUpdate.setSpecial(isAdmin);
+            userToUpdate.setSpecial(true);
             userRepository.save(userToUpdate);
-        } else {
-            throw new Exception("User not found with id: " + userId);
         }
+    }
+
+    public boolean isUserSpecial() {
+        return userEntity.getSpecial();
+    }
+
+    public Long currentUserID(){
+        return userEntity.getId();
     }
 
 }

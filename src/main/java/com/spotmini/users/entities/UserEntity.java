@@ -27,7 +27,7 @@ public class UserEntity {
         this.isSpecial = isSpecial;
     }
 
-    // getters and setters
+
     public Long getId() {
         return id;
     }
@@ -52,7 +52,7 @@ public class UserEntity {
         this.password = password;
     }
 
-    public boolean isSpecial() {
+    public boolean getSpecial() {
         return isSpecial;
     }
 
