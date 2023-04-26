@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
@@ -33,13 +34,15 @@ public class UserController {
 
 
     @PostMapping("/register")
-    public UserEntity registerUser(@RequestBody UserModel userModel) {
-        return userService.createUser(userModel);
+    @Secured("permitAll()")
+    public ResponseEntity<UserEntity> registerUser(@RequestBody UserModel userModel) {
+        return ResponseEntity.ok().body(userService.createUser(userModel));
     }
 
     @PostMapping("/login")
-    public UserEntity loginUser(@RequestParam String username, @RequestParam String password) {
-        return userService.loginUser(username, password);
+    @Secured("permitAll()")
+    public ResponseEntity<UserEntity> loginUser(@RequestBody UserModel userModel) {
+        return ResponseEntity.ok().body(userService.loginUser(userModel.getUsername(), userModel.getPassword()));
     }
 
     @PutMapping("/{id}")

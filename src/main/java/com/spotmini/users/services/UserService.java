@@ -18,8 +18,8 @@ public class UserService {
 
     public UserEntity createUser(UserModel userModel) {
         UserEntity userEntity = new UserEntity();
-        userEntity.setUsername(userEntity.getUsername());
-        userEntity.setPassword(userEntity.getPassword());
+        userEntity.setUsername(userModel.getUsername());
+        userEntity.setPassword(userModel.getPassword());
 
         return userRepository.save(userEntity);
     }
@@ -33,7 +33,6 @@ public class UserService {
                 return userEntity;
             }
         }
-
         return null;
     }
 
